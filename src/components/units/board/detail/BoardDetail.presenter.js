@@ -22,7 +22,7 @@ export default function BoardDetailUI(props) {
         <BottomWrapper>
           <Button>목록으로</Button>
           <Button>수정하기</Button>
-          <Button>삭제하기</Button>
+          <Button onClick={props.deleteBoard}>삭제하기</Button>
         </BottomWrapper>
       </Wrapper>
     )

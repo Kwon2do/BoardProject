@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useMutation } from '@apollo/client'
 import BoardWriteUI from './BoardWrite.presenter'
 import {CREATE_BOARD} from './BoardWrite.queries'
+import { useAmp } from 'next/amp';
 export default function BoardWriteContainer() {
     const router = useRouter()
 
@@ -16,12 +17,19 @@ export default function BoardWriteContainer() {
   const [titleError, setTitleError] = useState("");
   const [contentsError, setContentsError] = useState("");
 
+  const [isActive, setIsActive] = useState(false);
   const [createBoard] = useMutation(CREATE_BOARD)
 
   const onChangeWriter = (event) => {
     setWriter(event.target.value);
     if(event.target.value !== ""){
       setWriterError("")
+    }
+    if(event.target.value && password && title && contents){
+      setIsActive(true);
+    }
+    else {
+      setIsActive(false);
     }
   };
 
@@ -30,6 +38,12 @@ export default function BoardWriteContainer() {
     if(event.target.value !== ""){
       setPasswordError("")
     }
+    if(event.target.value && writer && title && contents){
+      setIsActive(true);
+    }
+    else {
+      setIsActive(false);
+    }
   };
 
   const onChangeTitle = (event) => {
@@ -37,12 +51,24 @@ export default function BoardWriteContainer() {
     if(event.target.value !== ""){
       setTitleError("")
     }
+    if(writer && contents && password && event.target.value){
+      setIsActive(true);
+    }
+    else {
+      setIsActive(false);
+    }
   };
 
   const onChangeContents = (event) => {
     setContents(event.target.value);
     if(event.target.value !== ""){
       setContentsError("")
+    }
+    if(writer && event.target.value && password && title){
+      setIsActive(true);
+    }
+    else {
+      setIsActive(false);
     }
   };
 
@@ -83,7 +109,7 @@ export default function BoardWriteContainer() {
         password={onChangePassword} passwordError={passwordError}
         title={onChangeTitle} titleError={titleError}
         contents={onChangeContents} contentsError={contentsError}
-        submit={onClickSubmit}
+        submit={onClickSubmit} isActive={isActive}
         />
     )
 
