@@ -1,52 +1,71 @@
 import {
-    Address,
-    ButtonWrapper,
-    Contents,
-    ImageWrapper,
-    InputWrapper,
-    Label,
-    OptionWrapper,
-    Password,
-    RadioButton,
-    RadioLabel,
-    SearchButton,
-    Subject,
-    SubmitButton,
-    Title,
-    UploadButton,
-    Wrapper,
-    Writer,
-    WriterWrapper,
-    Youtube,
-    Zipcode,
-    ZipcodeWrapper,
-    Error,
-  } from './BoardWrite.styles'
-export default function BoardWriteUI(prop) {
-    return (
-        <Wrapper>
-      <Title>게시글 등록</Title>
+  Address,
+  ButtonWrapper,
+  Contents,
+  ImageWrapper,
+  InputWrapper,
+  Label,
+  OptionWrapper,
+  Password,
+  RadioButton,
+  RadioLabel,
+  SearchButton,
+  Subject,
+  SubmitButton,
+  Title,
+  UploadButton,
+  Wrapper,
+  Writer,
+  WriterWrapper,
+  Youtube,
+  Zipcode,
+  ZipcodeWrapper,
+  Error,
+} from "./BoardWrite.styles";
+export default function BoardWriteUI(props) {
+  return (
+    <Wrapper>
+      <Title>게시글 {props.isEdit ? "수정" : "등록"}</Title>
       <WriterWrapper>
         <InputWrapper>
           <Label>작성자</Label>
-          <Writer type="text" placeholder="이름을 적어주세요." onChange={prop.writer} />
-          <Error>{prop.writerError}</Error>
+          <Writer
+            type="text"
+            placeholder="이름을 적어주세요."
+            onChange={props.onChangeWriter}
+            defaultValue={props.data?.fetchBoard.writer}
+            readOnly={props.data?.fetchBoard.writer}
+          />
+          <Error>{props.writerError}</Error>
         </InputWrapper>
         <InputWrapper>
           <Label>비밀번호</Label>
-          <Password type="password" placeholder="비밀번호를 작성해주세요." onChange={prop.password} />
-          <Error>{prop.passwordError}</Error>
+          <Password
+            type="password"
+            placeholder="비밀번호를 작성해주세요."
+            onChange={props.onChangePassword}
+          />
+          <Error>{props.passwordError}</Error>
         </InputWrapper>
       </WriterWrapper>
       <InputWrapper>
         <Label>제목</Label>
-        <Subject type="text" placeholder="제목을 작성해주세요." onChange={prop.title} />
-          <Error>{prop.titleError}</Error>
+        <Subject
+          type="text"
+          placeholder="제목을 작성해주세요."
+          onChange={props.onChangeTitle}
+          defaultValue={props.data?.fetchBoard.title}
+        />
+        <Error>{props.titleError}</Error>
       </InputWrapper>
       <InputWrapper>
         <Label>내용</Label>
-        <Contents placeholder="내용을 작성해주세요." onChange={prop.contents} />
-        <Error>{prop.contentsError}</Error>
+        <Contents
+          placeholder="내용을 작성해주세요."
+          onChange={props.onChangeContents}
+          defaultValue={props.data?.fetchBoard.Contents}
+        />
+        <Error>{props.contentsError}</Error>
       </InputWrapper>
       <InputWrapper>
         <Label>주소</Label>
@@ -75,8 +94,10 @@ export default function BoardWriteUI(prop) {
         <RadioLabel htmlFor="image">사진</RadioLabel>
       </OptionWrapper>
       <ButtonWrapper>
-        <SubmitButton onClick={prop.submit} isActive={prop.isActive}>등록하기</SubmitButton>
+        <SubmitButton onClick={props.isEdit ? props.onClickUpdate : props.onClickSubmit} isActive={props.isEdit ? true : props.isActive}>
+          {props.isEdit ? "수정하기" : "등록하기"}
+        </SubmitButton>
       </ButtonWrapper>
     </Wrapper>
-    )
+  );
 }

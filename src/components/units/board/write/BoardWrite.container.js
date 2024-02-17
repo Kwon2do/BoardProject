@@ -1,11 +1,12 @@
-import {useState} from 'react'
-import { useRouter } from "next/router";
+import { useState } from "react";
 import { useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
 import BoardWriteUI from './BoardWrite.presenter'
-import {CREATE_BOARD} from './BoardWrite.queries'
-import { useAmp } from 'next/amp';
-export default function BoardWriteContainer() {
-    const router = useRouter()
+import { CREATE_BOARD, UPDATE_BOARD } from './BoardWrite.queries'
+
+export default function BoardWrite(props){
+  const router = useRouter()
+  const [isActive, setIsActive] = useState(false);
 
   const [writer, setWriter] = useState("");
   const [password, setPassword] = useState("");
@@ -17,18 +18,18 @@ export default function BoardWriteContainer() {
   const [titleError, setTitleError] = useState("");
   const [contentsError, setContentsError] = useState("");
 
-  const [isActive, setIsActive] = useState(false);
   const [createBoard] = useMutation(CREATE_BOARD)
+  const [updateBoard] = useMutation(UPDATE_BOARD);
 
   const onChangeWriter = (event) => {
     setWriter(event.target.value);
     if(event.target.value !== ""){
       setWriterError("")
     }
-    if(event.target.value && password && title && contents){
+
+    if (event.target.value && password && title && contents) {
       setIsActive(true);
-    }
-    else {
+    } else {
       setIsActive(false);
     }
   };
@@ -38,10 +39,10 @@ export default function BoardWriteContainer() {
     if(event.target.value !== ""){
       setPasswordError("")
     }
-    if(event.target.value && writer && title && contents){
+
+    if (writer && event.target.value && title && contents) {
       setIsActive(true);
-    }
-    else {
+    } else {
       setIsActive(false);
     }
   };
@@ -51,10 +52,10 @@ export default function BoardWriteContainer() {
     if(event.target.value !== ""){
       setTitleError("")
     }
-    if(writer && contents && password && event.target.value){
+
+    if (writer && password && event.target.value && contents) {
       setIsActive(true);
-    }
-    else {
+    } else {
       setIsActive(false);
     }
   };
@@ -64,10 +65,10 @@ export default function BoardWriteContainer() {
     if(event.target.value !== ""){
       setContentsError("")
     }
-    if(writer && event.target.value && password && title){
+
+    if (writer && password && title && event.target.value) {
       setIsActive(true);
-    }
-    else {
+    } else {
       setIsActive(false);
     }
   };
@@ -104,13 +105,51 @@ export default function BoardWriteContainer() {
       }
     }
   };
-    return(
-        <BoardWriteUI writer={onChangeWriter} writerError={writerError}
-        password={onChangePassword} passwordError={passwordError}
-        title={onChangeTitle} titleError={titleError}
-        contents={onChangeContents} contentsError={contentsError}
-        submit={onClickSubmit} isActive={isActive}
-        />
-    )
 
-};
+  const onClickUpdate = async () => {
+    if (!title && !contents) {
+      alert("수정한 내용이 없습니다.");
+      return;
+    }
+
+    if (!password) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+
+    const updateBoardInput = {};
+    if (title) updateBoardInput.title = title;
+    if (contents) updateBoardInput.contents = contents;
+    
+    try {
+      const result = await updateBoard({
+        variables: {
+          boardId: router.query.boardId,
+          password,
+          updateBoardInput
+        },
+      })
+      router.push(`/boards/${result.data.updateBoard._id}`)
+    } catch(error) {
+      alert(error.message)
+    }
+  };
+
+  return (
+    <BoardWriteUI
+        writerError={writerError}
+        passwordError={passwordError}
+        titleError={titleError}
+        contentsError={contentsError}
+        onChangeWriter={onChangeWriter}
+        onChangePassword={onChangePassword}
+        onChangeTitle={onChangeTitle}
+        onChangeContents={onChangeContents}
+        onClickSubmit={onClickSubmit}
+        onClickUpdate={onClickUpdate}
+        isActive={isActive}
+        isEdit={props.isEdit}
+        data={props.data}
+    />
+  )
+}

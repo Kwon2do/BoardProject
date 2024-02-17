@@ -10,8 +10,3 @@ export const FETCH_BOARD = gql`
     }
   }
 `;
-export const DELETE_BOARD = gql`
-  mutation deleteBoard($boardId: ID!) {
-    deleteBoard(boardId:$boardId)
-  }
-`;
