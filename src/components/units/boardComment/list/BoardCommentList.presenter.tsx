@@ -1,14 +1,31 @@
-import * as S from "./BoardCommentList.styles"
-export default function BoardCommentListUIPage() {
-    return(
+import * as S from "./BoardCommentList.styles";
+import { BoardCommentListUIProps } from "../list/BoardCommentList.types";
+export default function BoardCommentListUIPage(props: BoardCommentListUIProps) {
+  return (
+    <div>
+      {props.data?.fetchBoardComments.map((el) => (
         <S.Wrapper>
-            <S.Title>
-                <S.Icon src="/../../../../../public/images/comment/icon.png"/>
-                <S.Label>댓글</S.Label>
-            </S.Title>
-            <S.NewComment>
-                <S.Contents placeholder="개인정보를 공유 및 요청하거나, 명예 훼손, 무단 광고, 불법 정보 유포시 모니터링 후 삭제될 수 있으며, 이에 대한 민형사상 책임은 게시자에게 있습니다."></S.Contents>
-            </S.NewComment>
+          <S.MainWrapper>
+            <S.Group>
+              <S.ProfileIcon src="/images/boardComment/list/profile_icon.png" />
+              <S.Group2>
+                <S.ContentsGroup>
+                  <S.Group3>
+                    <S.Writer>{el.writer}</S.Writer>
+                    <S.Group4>
+                      <S.UpdateIcon  id={el._id} src="/images/boardComment/list/update_icon.png"/>
+                      <S.DeleteIcon onClick={props.onClickDelete} id={el._id} src="/images/boardComment/list/delete_icon.png"/>
+                    </S.Group4>
+                  </S.Group3>
+                  <S.Contents>{el.contents}</S.Contents>
+                </S.ContentsGroup>
+                <S.CreateDate>{el.createdAt}</S.CreateDate>
+              </S.Group2>
+            </S.Group>
+          </S.MainWrapper>
+          <S.SubLine />
         </S.Wrapper>
-    )
+      ))}
+    </div>
+  );
 }
