@@ -3,6 +3,7 @@ import { CREATE_BOARD_COMMENT } from "./BoardCommentWrite.queries";
 import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
+import { FETCH_BOARD_COMMENTS } from "../list/BoardCommentList.queries";
 import {
   IMutation,
   IMutationCreateBoardCommentArgs,
@@ -16,6 +17,7 @@ export default function BoardCommentWriteContainerPage() {
     Pick<IMutation, "createBoardComment">,
     IMutationCreateBoardCommentArgs
   >(CREATE_BOARD_COMMENT);
+  const [rating, setRating] = useState(0);
   const onChangeWriter = (event: ChangeEvent<HTMLInputElement>) => {
     setWriter(event.target.value);
   };
@@ -37,11 +39,20 @@ export default function BoardCommentWriteContainerPage() {
             writer,
             password,
             contents,
-            rating: 0,
+            rating,
           },
           boardId: router.query.boardId,
         },
+        refetchQueries: [
+          {
+            query: FETCH_BOARD_COMMENTS,
+            variables: {
+              boardId: router.query.boardId,
+            },
+          },
+        ],
       });
+      alert("댓글이 등록되었습니다!");
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }
@@ -53,6 +64,8 @@ export default function BoardCommentWriteContainerPage() {
       onChangePassword={onChangePassword}
       onChangeContents={onChangeContents}
       onClickButton={onClickButton}
+      setRating={setRating}
+      rating={rating}
     />
   );
 }

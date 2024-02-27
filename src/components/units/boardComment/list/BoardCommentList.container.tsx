@@ -2,10 +2,15 @@ import BoardCommentListUIPage from "./BoardCommentList.presenter";
 import { MouseEvent } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import { FETCH_BOARD_COMMENTS, DELETE_BOARD_COMMENT} from "./BoardCommentList.queries";
 import {
-    IMutation,
+  FETCH_BOARD_COMMENTS,
+  DELETE_BOARD_COMMENT,
+  UPDATE_BOARD_COMMENT,
+} from "./BoardCommentList.queries";
+import {
+  IMutation,
   IMutationDeleteBoardCommentArgs,
+  IMutationUpdateBoardCommentArgs,
   IQuery,
   IQueryFetchBoardCommentsArgs,
 } from "../../../../commons/types/generated/types";
@@ -22,8 +27,32 @@ export default function BoardCommentListContainerPage() {
       boardId: router.query.boardId,
     },
   });
+  const [updateBoardComment] = useMutation<
+    Pick<IMutation, "updateBoardComment">,
+    IMutationUpdateBoardCommentArgs
+  >(UPDATE_BOARD_COMMENT);
 
-  const [deleteBoardComment] = useMutation<Pick<IMutation,"deleteBoardComment">,IMutationDeleteBoardCommentArgs>(DELETE_BOARD_COMMENT);
+  const onClickUpdate = async (event: MouseEvent<HTMLImageElement>) => {
+    const password = prompt("비밀번호를 입력하세요.");
+    try {
+      if (!(event.target instanceof HTMLImageElement)) {
+        alert("시스템 오류 발생");
+        return;
+      } else {
+        await updateBoardComment({
+          variables: {
+            updateBoardCommentInput: {},
+            password,
+            boardCommentId: event.target.id,
+          },
+        });
+      }
+    } catch {}
+  };
+  const [deleteBoardComment] = useMutation<
+    Pick<IMutation, "deleteBoardComment">,
+    IMutationDeleteBoardCommentArgs
+  >(DELETE_BOARD_COMMENT);
   const onClickDelete = async (event: MouseEvent<HTMLImageElement>) => {
     //prompt를 사용해 사용자에게 입력받음
     const password = prompt("비밀번호를 입력하세요.");
@@ -41,8 +70,8 @@ export default function BoardCommentListContainerPage() {
           {
             query: FETCH_BOARD_COMMENTS,
             variables: {
-            //댓글 조회 API에서는 게시물 ID를 요구
-              boardId: router.query.boardId,     
+              //댓글 조회 API에서는 게시물 ID를 요구
+              boardId: router.query.boardId,
             },
           },
         ],
@@ -53,7 +82,6 @@ export default function BoardCommentListContainerPage() {
       }
     }
   };
-  return (
-  <BoardCommentListUIPage data={data} onClickDelete={onClickDelete} />
-  );
+
+  return <BoardCommentListUIPage data={data} onClickDelete={onClickDelete} />;
 }

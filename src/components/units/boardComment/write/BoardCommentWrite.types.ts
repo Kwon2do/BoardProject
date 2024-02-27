@@ -5,4 +5,6 @@ export interface IBoardCommentWriteUIProps {
   onChangeContents: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   onClickButton: () => void;
   contents: string;
+  rating: number;
+  setRating: (value: any) => any;
 }
