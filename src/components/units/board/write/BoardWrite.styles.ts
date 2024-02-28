@@ -1,5 +1,8 @@
 import styled from "@emotion/styled";
-import {IBoardListUIProps} from "./BoardWrite.types"
+import { IBoardWriteUIProps } from "./BoardWrite.types";
+import { Modal } from "antd";
+import DaumPostcode from "react-daum-postcode";
+
 export const Wrapper = styled.div`
   width: 1200px;
   /* height: 1847px; */
@@ -164,9 +167,8 @@ export const SubmitButton = styled.button`
   margin-left: 12px;
   margin-right: 12px;
   cursor: pointer;
-  background-color: ${(props:Pick<IBoardListUIProps, "isActive">)=>
-    props.isActive ? "yellow" : "gray"
-  };
+  background-color: ${(props: Pick<IBoardWriteUIProps, "isActive">) =>
+    props.isActive ? "yellow" : "gray"};
   border-radius: 7px;
 `;
 
@@ -175,3 +177,7 @@ export const Error = styled.div`
   font-size: 14px;
   color: red;
 `;
+
+export const AddressModal = styled(Modal)``;
+
+export const AddressSearchInput = styled(DaumPostcode)``;
