@@ -13,28 +13,19 @@ export const Group = styled.div`
   display: flex;
 `;
 
-export const Board = styled.div`
+export const MenuItem = styled.div`
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
   align-items: center;
+  cursor: pointer;
+  color: black;
+  :hover {
+    color: orange;
+  }
 `;
 export const Line = styled.div`
   color: white;
   align-items: center;
   margin-left: 20px;
   margin-right: 20px;
-`;
-
-export const Market = styled.div`
-  font-size: 18px;
-  font-weight: 500;
-  align-items: center;
-  color: #ab9000;
-`;
-
-export const Mypage = styled.div`
-  font-size: 18px;
-  font-weight: 500;
-  align-items: center;
-  color: #ab9000;
 `;
