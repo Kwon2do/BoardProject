@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-
+import Pagination from "../../../commons/pagination/01/Paginations01.container";
 export const Wrapper = styled.div`
   width: 1200px;
   margin: 100px;
@@ -54,7 +54,6 @@ export const ColumnTitle = styled.div`
 export const Footer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: left;
   padding-top: 50px;
 `;
 
